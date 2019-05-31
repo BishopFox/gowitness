@@ -32,7 +32,7 @@ var (
 	chromeTimeout    int
 	chromeTimeBudget string
 	chromePath       string
-	chromeProxy       string
+	ChromeProxy       string
 	userAgent        string
 
 	// screenshot command flags
