@@ -7,10 +7,10 @@ import (
 	"os"
 	"text/template"
 
-	gwtmpl "github.com/sensepost/gowitness/template"
+	gwtmpl "github.com/bishopfox/gowitness/template"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/sensepost/gowitness/storage"
+	"github.com/bishopfox/gowitness/storage"
 	"github.com/spf13/cobra"
 	"github.com/tidwall/buntdb"
 )

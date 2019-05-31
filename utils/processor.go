@@ -6,12 +6,13 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+    "os"
 
-	chrm "github.com/sensepost/gowitness/chrome"
+	chrm "github.com/bishopfox/gowitness/chrome"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/parnurzeal/gorequest"
-	"github.com/sensepost/gowitness/storage"
+	"github.com/bishopfox/gowitness/storage"
 )
 
 const (
@@ -30,9 +31,20 @@ func ProcessURL(url *url.URL, chrome *chrm.Chrome, db *storage.Storage, timeout 
 	// prepare a storage instance for this URL
 	log.WithField("url", url).Debug("Processing URL")
 
-	request := gorequest.New().Timeout(time.Duration(timeout)*time.Second).
-		TLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
-		Set("User-Agent", chrome.UserAgent)
+    // proxy hack start here
+    var request *gorequest.SuperAgent
+    proxyUrl := os.Getenv(`HTTP_PROXY`)
+
+    if proxyUrl != "" {
+        // *Dont* verify remote certificates.
+        request = gorequest.New().Proxy(proxyUrl).Timeout(time.Duration(timeout)*time.Second).
+            TLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
+            Set("User-Agent", chrome.UserAgent)
+    } else {
+        request = gorequest.New().Proxy(proxyUrl).Timeout(time.Duration(timeout)*time.Second).
+            TLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
+            Set("User-Agent", chrome.UserAgent)
+    }
 
 	resp, _, errs := request.Get(url.String()).End()
 	if errs != nil {

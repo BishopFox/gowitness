@@ -92,7 +92,7 @@ var HTMLContent = `
           <div class="col-sm-4 py-4">
             <h4 class="text-white">Contact</h4>
             <ul class="list-unstyled">
-              <li> <a href="https://github.com/sensepost/gowitness" class="text-white">Github</a> </li>
+              <li> <a href="https://github.com/bishopfox/gowitness" class="text-white">Github</a> </li>
               <li> <a href="https://twitter.com/leonjza" class="text-white">@leonjza</a> </li>
               <li> <a href="https://twitter.com/sensepost" class="text-white">@sensepost</a> </li>
             </ul>
