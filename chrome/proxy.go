@@ -25,16 +25,8 @@ func (proxy *forwardingProxy) start() error {
 	log.WithFields(log.Fields{"target-url": proxy.targetURL}).Debug("Initializing shitty forwarding proxy")
 
 	// *Dont* verify remote certificates.
-    var transport *http.Transport
-    if ChromeProxy != "" {
-        transport = &http.Transport{
-            TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-            Proxy: http.ProxyURL(ChromeProxy),
-        }
-    } else {
-        transport = &http.Transport{
-            TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-        }
+    transport := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
     }
 
 	// Start the proxy and assign our custom Transport
