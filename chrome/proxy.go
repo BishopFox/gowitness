@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	log "github.com/sirupsen/logrus"
-    "github.com/bishopfox/gowitness/cmd"
 )
 
 const listeningURL string = "127.0.0.1"
@@ -27,10 +26,10 @@ func (proxy *forwardingProxy) start() error {
 
 	// *Dont* verify remote certificates.
     var transport *http.Transport
-    if cmd.ChromeProxy != "" {
+    if ChromeProxy != "" {
         transport = &http.Transport{
             TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-            Proxy: http.ProxyURL(cmd.ChromeProxy),
+            Proxy: http.ProxyURL(ChromeProxy),
         }
     } else {
         transport = &http.Transport{
