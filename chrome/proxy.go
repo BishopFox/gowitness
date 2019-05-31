@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	log "github.com/sirupsen/logrus"
+    "github.com/bishopfox/gowitness/cmd"
 )
 
 const listeningURL string = "127.0.0.1"
