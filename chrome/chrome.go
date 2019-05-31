@@ -166,44 +166,37 @@ func (chrome *Chrome) ScreenshotURL(targetURL *url.URL, destination string) {
 
 	// Check if we need to add a proxy hack for Chrome headless to
 	// stfu about certificates :>
-	if targetURL.Scheme == "https" {
 
-		// Chrome headless... you suck. Proxy to the target
-		// so that we can ignore SSL certificate issues.
-		// proxy := shittyProxy{targetURL: targetURL}
-		originalPath := targetURL.Path
-		proxy := forwardingProxy{targetURL: targetURL}
+    // Chrome headless... you suck. Proxy to the target
+    // so that we can ignore SSL certificate issues.
+    // proxy := shittyProxy{targetURL: targetURL}
+    originalPath := targetURL.Path
+    proxy := forwardingProxy{targetURL: targetURL}
 
-		// Give the shitty proxy a few moments to start up.
-		time.Sleep(500 * time.Millisecond)
+    // Give the shitty proxy a few moments to start up.
+    time.Sleep(500 * time.Millisecond)
 
-		// Start the proxy and grab the listening port we should tell
-		// Chrome to connect to.
-		if err := proxy.start(); err != nil {
+    // Start the proxy and grab the listening port we should tell
+    // Chrome to connect to.
+    if err := proxy.start(); err != nil {
 
-			log.WithField("error", err).Warning("Failed to start proxy for HTTPS request")
-			return
-		}
+        log.WithField("error", err).Warning("Failed to start proxy for HTTPS request")
+        return
+    }
 
-		// Update the URL scheme back to http, the proxy will handle the SSL
-		proxyURL, _ := url.Parse("http://localhost:" + strconv.Itoa(proxy.port) + "/")
-		proxyURL.Path = originalPath
+    // Update the URL scheme back to http, the proxy will handle the SSL
+    proxyURL, _ := url.Parse("http://localhost:" + strconv.Itoa(proxy.port) + "/")
+    proxyURL.Path = originalPath
 
-		// I am not 100% sure if this does anything, but lets add --allow-insecure-localhost
-		// anyways.
-		chromeArguments = append(chromeArguments, "--allow-insecure-localhost")
+    // I am not 100% sure if this does anything, but lets add --allow-insecure-localhost
+    // anyways.
+    chromeArguments = append(chromeArguments, "--allow-insecure-localhost")
 
-		// set the URL to call to the proxy we are starting up
-		chromeArguments = append(chromeArguments, proxyURL.String())
+    // set the URL to call to the proxy we are starting up
+    chromeArguments = append(chromeArguments, proxyURL.String())
 
-		// when we are done, stop the hack :|
-		defer proxy.stop()
-
-	} else {
-
-		// Finally add the url to screenshot
-		chromeArguments = append(chromeArguments, targetURL.String())
-	}
+    // when we are done, stop the hack :|
+    defer proxy.stop()
 
 	log.WithFields(log.Fields{"arguments": chromeArguments}).Debug("Google Chrome arguments")
 
